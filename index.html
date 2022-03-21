@@ -3,8 +3,13 @@
 
 </div>
 
+<div id="keyboard"></div>
 <script>
-
+	keyboard=document.getElementById('keyboard');
+	for (var c=0;c<26;c++){
+			keyboard.innerHTML+="<div class='cell'>"+String.fromCharCode(65+c)+"</div>";
+			
+		}
 
 	var word="ADADOS";
 	var current_letter=0;
@@ -85,6 +90,19 @@
 	newLine();
 </script>
 <style>
+body{
+	font: 1em "Open Sans", sans-serif;
+
+}
+#keyboard{
+	
+	position: absolute;
+	bottom: 10px;
+	left : 50%;
+	width: 30%;
+	border: 3px solid #8AC007;
+	transform: translate(-50%, -50%);
+}
 .line{
 	display:flex;
 }
@@ -103,9 +121,9 @@
 }
 #wordus-container{
 	display : flex;
-flex-direction:column;
-align-items : center;
-justify-content : center;
+	flex-direction : column;
+	align-items : center;
+	justify-content : center;
 }
 .correct{
 	background-color:#F00;
