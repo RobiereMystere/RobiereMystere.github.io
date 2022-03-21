@@ -37,14 +37,18 @@
 						}
 						
 				}
+			//alert(temp_word+" "+curword);
 			for (var l = 0;l<curword.length;l++){
 					if(curword[l]!='_' && temp_word.includes(curword[l])){
+							k=temp_word.indexOf(curword[l]);
 							var cell=document.getElementById("letter_"+l+"_"+line_nb);
 							cell.classList.add('misplaced');
 							curword=curword.substring(0,l)+"_"+curword.substring(l+1,curword.length);
+							temp_word=temp_word.substring(0,k)+"_"+temp_word.substring(k+1,temp_word.length);
+
 						}
 				}
-
+			//alert(temp_word+" "+curword);
 
 
 			return current_word==word;
@@ -64,6 +68,7 @@
 						let str = "_";
 						current_cell=document.getElementById("letter_"+current_letter+"_"+line_nb);
 						current_cell.innerText=str;
+						current_word=current_word.substring(0,current_word.length-1);
 
 					}else if(event.keyCode==13 && current_letter==word.length){
 							if(!checkWord()){
