@@ -7,8 +7,14 @@
 <script>
 	keyboard=document.getElementById('keyboard');
 	for (var c=0;c<26;c++){
-			keyboard.innerHTML+="<div class='cell'>"+String.fromCharCode(65+c)+"</div>";
-			
+			var letter=String.fromCharCode(65+c)
+			keyboard.innerHTML+="<div class='cell' id='key_"+letter+"' onclick='addChar(String.fromCharCode(65+"+c+"));'>"+String.fromCharCode(65+c)+"</div>";
+		}
+	keyboard.innerHTML+="<div class='cell' id='backspace' onclick='delChar();'>"+String.fromCharCode(9003)+"</div>";
+	keyboard.innerHTML+="<div class='cell' id='return' onclick='submitWord();'>"+String.fromCharCode(8617)+"</div>";
+
+	function sendkey(chr){
+			addChar(chr);
 		}
 
 	var word="ADADOS";
@@ -29,18 +35,46 @@
 
 
 		}
+
+	function addChar(chr){
+			let str = chr;
+			current_cell=document.getElementById("letter_"+current_letter+"_"+line_nb);
+			current_cell.innerText=str.toUpperCase();
+			current_letter+=1;
+			current_word+=str.toUpperCase();
+		}
+	function delChar(){
+			if(current_letter>0){
+					current_letter-=1;
+					current_cell=document.getElementById("letter_"+current_letter+"_"+line_nb);
+					current_cell.innerText="_";
+					current_word=current_word.substring(0,current_word.length-1);
+				}
+		}
+	function submitWord(){
+			if(current_letter==word.length){
+					if(!checkWord()){
+							line_nb++;
+							current_letter=0;
+							current_word="";
+							newLine();
+						}else{
+								alert("youpi");
+							}
+
+				}
+		}
 	function checkWord(){
 			temp_word=word;
 			curword=current_word;
 			for (var l = 0;l<word.length;l++){
 					if(word[l]==curword[l]){
 							var cell=document.getElementById("letter_"+l+"_"+line_nb);
-
 							cell.classList.add('correct');
 							temp_word=temp_word.substring(0,l)+"_"+temp_word.substring(l+1,temp_word.length);
 							curword=curword.substring(0,l)+"_"+curword.substring(l+1,curword.length);
 						}
-						
+
 				}
 			//alert(temp_word+" "+curword);
 			for (var l = 0;l<curword.length;l++){
@@ -62,46 +96,30 @@
 	window.addEventListener("keydown", function(event) {
 			if(current_letter<word.length && ((event.keyCode>=65 && event.keyCode<=90)||(event.keyCode>=97 && event.keyCode<=122))){
 					let str = event.key;
-					current_cell=document.getElementById("letter_"+current_letter+"_"+line_nb);
-					current_cell.innerText=str.toUpperCase();
-					current_letter+=1;
-					current_word+=str.toUpperCase();
-				}else if(event.keyCode==8 && current_letter>0){
+					addChar(str);
+				}else if(event.keyCode==8 ){
+						delChar();
+					}else if(event.keyCode==13){ 
+							submitWord();
 
-
-						current_letter-=1;
-						let str = "_";
-						current_cell=document.getElementById("letter_"+current_letter+"_"+line_nb);
-						current_cell.innerText=str;
-						current_word=current_word.substring(0,current_word.length-1);
-
-					}else if(event.keyCode==13 && current_letter==word.length){
-							if(!checkWord()){
-									line_nb++;
-									current_letter=0;
-									current_word="";
-									newLine();
-								}else{
-										alert("youpi");
-									}
 						}
 		}, true);
 
 	newLine();
 </script>
-<style>
+			<style>
 body{
 	font: 1em "Open Sans", sans-serif;
 
 }
 #keyboard{
-	
+
 	position: absolute;
 	bottom: 10px;
 	left : 50%;
-	width: 30%;
-	border: 3px solid #8AC007;
-	transform: translate(-50%, -50%);
+width: 30%;
+border: 3px solid #8AC007;
+transform: translate(-50%, -50%);
 }
 .line{
 	display:flex;
@@ -132,5 +150,5 @@ body{
 	background-color:#FD0;
 }
 
-</style>
+			</style>
 
