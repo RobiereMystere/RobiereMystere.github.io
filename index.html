@@ -1,0 +1,115 @@
+<div id="wordus-container">
+
+
+</div>
+
+<script>
+
+
+	var word="BIBOU";
+	var current_letter=0;
+	var current_word="";
+	var line_nb=0;
+	function newLine(){
+			container=document.getElementById("wordus-container")
+
+			container.innerHTML += "<div class='line' id='line_"+line_nb+"'></div>"	
+			line=document.getElementById('line_'+line_nb);
+			var tries=5;
+			for (var i = 0;i< word.length;i++){
+					line.innerHTML += "<div class='cell' id='letter_"+i+"_"+line_nb+"'>_</div>"	
+
+				}
+
+
+
+		}
+	function checkWord(){
+			temp_word=word;
+			curword=current_word;
+			for (var l = 0;l<word.length;l++){
+					if(word[l]==curword[l]){
+							var cell=document.getElementById("letter_"+l+"_"+line_nb);
+
+							cell.classList.add('correct');
+							temp_word=temp_word.substring(0,l)+"_"+temp_word.substring(l+1,temp_word.length);
+							curword=curword.substring(0,l)+"_"+curword.substring(l+1,curword.length);
+						}
+						
+				}
+			alert(temp_word+" "+curword);
+			for (var l = 0;l<curword.length;l++){
+					if(curword[l]!='_' && temp_word.includes(curword[l])){
+							var cell=document.getElementById("letter_"+l+"_"+line_nb);
+							cell.classList.add('misplaced');
+							curword=curword.substring(0,l)+"_"+curword.substring(l+1,curword.length);
+						}
+				}
+
+			alert(temp_word+" "+curword);
+
+
+			return current_word==word;
+
+		}
+	window.addEventListener("keydown", function(event) {
+			if(current_letter<word.length && ((event.keyCode>=65 && event.keyCode<=90)||(event.keyCode>=97 && event.keyCode<=122))){
+					let str = event.key;
+					current_cell=document.getElementById("letter_"+current_letter+"_"+line_nb);
+					current_cell.innerText=str.toUpperCase();
+					current_letter+=1;
+					current_word+=str.toUpperCase();
+				}else if(event.keyCode==8 && current_letter>0){
+
+
+						current_letter-=1;
+						let str = "_";
+						current_cell=document.getElementById("letter_"+current_letter+"_"+line_nb);
+						current_cell.innerText=str;
+
+					}else if(event.keyCode==13 && current_letter==word.length){
+							if(!checkWord()){
+									line_nb++;
+									current_letter=0;
+									current_word="";
+									newLine();
+								}else{
+										alert("youpi");
+									}
+						}
+		}, true);
+
+	newLine();
+</script>
+<style>
+.line{
+	display:flex;
+}
+.cell{
+	float:left;
+	width:40px;
+	height:40px;
+	border:solid black 1px;
+	padding:2px;
+	margin:2px;
+	text-align:center;
+	display : flex;
+	align-items : center;
+	justify-content : center;
+
+}
+#wordus-container{
+	display : flex;
+flex-direction:column;
+align-items : center;
+justify-content : center;
+}
+.correct{
+	background-color:#F00;
+}
+.misplaced{
+	background-color:#FD0;
+}
+
+</style>
+
